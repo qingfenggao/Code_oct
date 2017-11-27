@@ -317,33 +317,33 @@
 %     Result = M + N;
 % end
 
-% %% 加载N数据，生成折射率图像
-% clear; close all; clc;
-% 
-% filename = '47_1';                       %% input file name
-% prepath = '龋坏样品\纵切样品\';            %% 
-% % open([prepath,filename,'Surface.fig']);      %% input the file name which is needed to proceed
-% load([prepath,filename,'.mat'])           %% care the pathway
-% picture_size = 550;                       % coronal direction length
-% coronal_int = 7.2/1000;                      % mm unit,interval
-% sagittal_int = 0.027645;                     % mm unit
-% axial_int = 1.31/153;                        % mm unit  4.7/500 is replaced
-% [r_num,c_num]=size(N);
-% r_len = (1:r_num)*sagittal_int;
-% c_len = (1:c_num)*coronal_int;
-% 
-% N_max = 2;
-% N_min = 1;
-% N(find(isnan(N)==1)) = 0;
-% N(find(N<=N_min)) = 0;                       % removing some unexpect data range (N_min,N_max)
-% N(find(N>=N_max)) = 0;
-% N = medfilt2(N,[3,3]);                       % use median fiter
-% 
-% figure('name','Results','position',[800,50,picture_size,2/5*picture_size*sagittal_int/coronal_int-100]),
-% imagesc(c_len,r_len,N,[1,2]);axis image;
-% impixelinfo;colorbar;
-% xlabel('Distance of X axis [mm]','FontSize',16);
-% ylabel('Distance of Y axis [mm]','FontSize',16);
+% 加载N数据，生成折射率图像
+clear; close all; clc;
+
+filename = 'L42_2';                       %% input file name
+prepath = '健康样品\纵切样品\';            %% 
+% open([prepath,filename,'Surface.fig']);      %% input the file name which is needed to proceed
+load([prepath,filename,'.mat'])           %% care the pathway
+picture_size = 550;                       % coronal direction length
+coronal_int = 7.2/1000;                      % mm unit,interval
+sagittal_int = 0.027645;                     % mm unit
+axial_int = 1.31/153;                        % mm unit  4.7/500 is replaced
+[r_num,c_num]=size(N);
+r_len = (1:r_num)*sagittal_int;
+c_len = (1:c_num)*coronal_int;
+
+N_max = 2;
+N_min = 1.33;      %%
+N(find(isnan(N)==1)) = 0;
+N(find(N<=N_min)) = 0;                       % removing some unexpect data range (N_min,N_max)
+N(find(N>=N_max)) = 0;
+N = medfilt2(N,[3,3]);                       % use median fiter
+
+figure('name','Results','position',[800,50,picture_size,2/5*picture_size*sagittal_int/coronal_int-100]),
+imagesc(c_len,r_len,N,[1,2]);axis image;
+impixelinfo;colorbar;
+xlabel('Distance of X axis [mm]','FontSize',16);
+ylabel('Distance of Y axis [mm]','FontSize',16);
 
 
 

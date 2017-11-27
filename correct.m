@@ -9,9 +9,9 @@
 
 
 clear; close all; clc;
-path_name = 'D:\Documents\optical coherence tomography\Data\OCT-Data\Data_3D\Data_20170824\D8_e';  %%% 设置数据路径
+path_name = 'D:\OCT_Sync\Data\OCT-Data\Data_3D\Data_20171114\L41_1';  %%% 设置数据路径
 addpath(path_name);                                      % 添加数据文件%%%%%% correct value
-I = imread('2.bmp');                                    %% I为为参考帧
+I = imread('1.bmp');                                    %% I为为参考帧
 imshow(I);axis on;
 % figure,imshow(I(250:450,:),[100 255]); colorbar;        % 获取弯曲的反射基板面
 cor = 10;
@@ -25,15 +25,15 @@ surface_pro = surface + (cor-1)*ones(1,1000);   % get the position of surface
 min_val = min(surface_pro);
 z_new = surface_pro - min_val*ones(1,1000);     % be attention to modificating the name in saving
 z_correct = z_new;
-save correct_7D_20170824_z5 z_correct          %%%
+save correct_7D_2017xxxx_z5 z_correct           %%%
 
 
-load('correct_7D');        
+load('correct_7D_20171102');        
 z_7D = z_correct;
 figure,
 x = 1:1000;
 plot(x,z_7D,x,z_new);       
-legend('z 7D','z new','Location','Northeast');             %%%
+legend('z 7D','z new','Location','Northeast');       
 %%%%%%%%%%%%%%%%% use for paper,creat a calibration profile line  %%%%%%%%%%%%%%%
 % coronal_int = 7.2/1000;        % mm unit,interval
 % figure,
@@ -42,23 +42,23 @@ legend('z 7D','z new','Location','Northeast');             %%%
 % ylabel('Pixel Numbel of Calibration','FontSize',18);
 % set(gca,'FontSize',14,'XTick',0:2:8,'YTick',0:5:25);   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-load('correct_7D_20170824_z1');             %%
+load('correct_7D_20171114_z1');             %%
 z1 = z_correct;
-load('correct_7D_20170824_z2');             %%
+load('correct_7D_20171114_z2');             %%
 z2 = z_correct;
-load('correct_7D_20170824_z3');             %%
+load('correct_7D_20171114_z3');             %%
 z3 = z_correct;
-load('correct_7D_20170824_z4');             %%
+load('correct_7D_20171114_z4');             %%
 z4 = z_correct;
-load('correct_7D_20170824_z5');             %%
+load('correct_7D_20171114_z5');             %%
 z5 = z_correct;
 z_correct = (z1+z2+z3+z4+z5)/5;
 z_correct = round(z_correct);
 figure,
 x = 1:1000;
-plot(x,z_7D,x,z_correct);         %%%
+plot(x,z_7D,x,z_correct);                  %%%
 legend('z 7D','z new average','Location','Northeast'); 
-save correct_7D_20170824 z_correct              %% rename!!!
+save correct_7D_20171114 z_correct              %% rename!!!
 
 
 

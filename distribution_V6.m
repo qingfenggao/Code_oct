@@ -2,23 +2,26 @@
 % 用于计算玻璃折射率而定制的
 % version 6     written by gao at 2016/12/26
 
-clear;close all;clc;tic;
-filename = '1208_10_5';                 %%%% set file name
-path_name =['D:\Administrator\optical coherence tomography\Data\Data_3D\Data_20161208\',filename,'\'];   % 设置数据路径
+clear;close all;
+clc;tic;
+filename = 'L41_1';                 %%%% set file name
+path_name =['D:\OCT_Sync\Data\OCT-Data\Data_3D\Data_20171114\',filename,'\'];   % 设置数据路径
 addpath(path_name);  
 pic = dir([path_name,'*.bmp']);
 
 % The algorithm parameters:
-size_1 = 100;
-size_2 = 90;                       %% setting ROI size of axial direction
-num_f = 10;                         %%%% referece line numeber
-r_val = 150;                        %% coordinate point,row
-c_val = 500;                        %% column
-bias = 20;                          %% colorbar bias value
+extract =  2;                       %% correct value       
+num_f = 10;                         %% referece line numeber
+
+size_1 = 100;                       %
+size_2 = 90;                        % setting ROI size of axial direction
+r_val = 150;                        % coordinate point,row
+c_val = 500;                        % column
+bias = 20;                          % colorbar bias value
 deeper_val = 3;
-coronal_int = 1/1000;                % cm unit
-sagittal_int = 1/400;                % cm unit
-axial_int = 4.7/500;                 % cm unit
+coronal_int = 7.2/1000;             % mm unit,interval
+sagittal_int = 0.027645;            % mm unit
+axial_int = 1.31/153;               % mm unit 由载玻片玻璃的厚度的计算而来
 
 a = size(pic);
 num = a(1);
@@ -31,25 +34,25 @@ for i=2:num                                               %%% 随起始帧的改变而改
      x=fname;
      d= imread(x);
      [d] = img_cor(d,0);
-     img_3D = cat(3,img_3D,d);                             % 3维数据堆放在D中
+     img_3D = cat(3,img_3D,d);                         % 3维数据堆放在D中
 end  
 
 Opt_dis = zeros(400,1000);                                 % assign memory
 z1 = zeros(1,400);                                         % assign memory
 Thickness = Opt_dis;                                       % assign memory
-for i = 1:num                                  % frame number
+for i = 1:num                                              % frame number
     
     for TF = -5:1:5
          [~,cut_point(TF+6)] = max(img_3D(:,num_f,i));
     end
-    cut_line2 = mode(cut_point);              % get the cut_line2 position
+    cut_line2 = mode(cut_point);                           % get the cut_line2 position
     cut_line2 = cut_line2 + deeper_val;
     cut_line1 = cut_line2 - size_1;
     cut_line3 = cut_line2 + size_2 - 1;
     
     I = img_3D(:,:,i);
 
-    IM_s = I(cut_line1:cut_line2-1,:);          % get image data
+    IM_s = I(cut_line1:cut_line2-1,:);                     % get image data
     IM_d = I(cut_line2:cut_line3,:);
     for pos_x = 1:1000
         [~,img_s(1,pos_x)] = max(IM_s(:,pos_x));
@@ -104,8 +107,8 @@ annotation('textbox',[0.01 0.05 0.3 0.05],...
     'String',{['Actual Thickness(mm)：',num2str(Actual_Thickness)]},...
     'FitBoxToText','on','FontSize',14,'EdgeColor','none');
 
-saveas(gcf,['MethodOfFindPeaks\',[filename,'.fig']]);            %% 
-save(['MethodOfFindPeaks\',filename,'.mat'],'N');                %%
+% saveas(gcf,['MethodOfFindPeaks\',[filename,'.fig']]);            %% 
+% save(['MethodOfFindPeaks\',filename,'.mat'],'N');                %%
 
 
 

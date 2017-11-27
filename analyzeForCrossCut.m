@@ -2,17 +2,17 @@
 % First time written by gao  at 2017/1/3
 clear; close all; clc;
 
-filename = 'D5';                      %% input file name
-prepath = '龋坏样品\横切样品\';          %% 
-saveValuePath = 'meanValues\';          %% 
-load([prepath,filename,'.mat'])              %% care the pathway
-open(['龋坏样品\横切样品\',filename,'Surface.fig']);      %% input the file name which is needed to proceed
+filename = 'ZH9_2';                           %% input file name
+prepath = '健康样品\横切样品\';               %% 
+saveValuePath = 'meanValues\';               % 
+load([prepath,filename,'.mat'])              % care the pathway
+open(['健康样品\横切样品\',filename,'Surface.fig']);      %% input the file name which is needed to proceed
 hold on;
-ROInumForEveryLine = 10;                     %% not include centra of circle
-contourPointNum = 20;                        %% number of lines
-Slice_centre = [5.3,4.23];                  %% mm unit
+ROInumForEveryLine = 10;                     % not include centra of circle
+contourPointNum = 20;                        % number of lines
+Slice_centre = [5.16,4.5];                  %% mm unit
 coronal_int = 7.2/1000;                      % mm unit,interval
-sagittal_int = 0.027645;                       % mm unit
+sagittal_int = 0.027645;                     % mm unit
 axial_int = 1.31/153;                        % mm unit  4.7/500 is replaced
 picture_size = 550;                          % coronal direction length
 N_max = 2;
@@ -47,7 +47,7 @@ N(find(N<=N_min)) = 0;                       % removing some unexpect data range
 N(find(N>=N_max)) = 0;
 N = medfilt2(N,[3,3]);                       % use median fiter
 
-figure('name','Results','position',[550,50,picture_size,2/5*picture_size*sagittal_int/coronal_int]),
+figure('name','Results','position',[550,70,picture_size,2/5*picture_size*sagittal_int/coronal_int-100]),
 imagesc(c_len,r_len,N,[1,2]);axis image;
 impixelinfo;
 xlabel('Distance of X axis [mm]','FontSize',16);
@@ -64,10 +64,10 @@ for i = 1:contourPointNum
         ROI_data(find(ROI_data<=N_min)) = 0;                                        % removing some unexpect data range (1,2)
         ROI_data(find(ROI_data>=N_max)) = 0;
         ROI_data(ROI_data==0) = [];
-        meanMatrix(i,j) = mean(ROI_data);             % 表示第i条线第j个圆的平均
+        meanMatrix(i,j) = mean(ROI_data,'omitnan');             % 表示第i条线第j个圆的平均
     end
 end
-meanData = mean(meanMatrix,1);
+meanData = mean(meanMatrix,'omitnan');
 for i = 1:contourPointNum                                                                      % the index of counter point
         lineLength(i) = sqrt((Slice_centre(1)-Xpos(i))^2 + (Slice_centre(2)-Ypos(i))^2);
         radius(i) = lineLength(i)/(ROInumForEveryLine*2+1);
@@ -84,9 +84,9 @@ if contourPointNum==1
     ROI_data(find(ROI_data<=N_min)) = 0;     % removing some unexpect data range (1,2)
     ROI_data(find(ROI_data>=N_max)) = 0;
     ROI_data(ROI_data==0) = [];
-    meanCentre = mean(ROI_data);             % 表示第i条线第j个圆的平均
+    meanCentre = mean(ROI_data,'omitnan');             % 表示第i条线第j个圆的平均
 else
-    meanCentre = mean(N(BW));
+    meanCentre = mean(N(BW),'omitnan');
 end
 
 meanValue = [meanCentre,meanData];
@@ -94,6 +94,7 @@ hold off;
 
 save([saveValuePath,filename,'.mat'],'meanValue','Slice_centre');    
 disp(meanValue)
+aCopyValue = [meanValue,Slice_centre];          % data used for coping for MB to Excel
 
 
 

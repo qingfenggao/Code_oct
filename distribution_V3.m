@@ -5,16 +5,16 @@
 
 clear;clc;tic;
 close all;
-filename = 'L42_1';                              %%%% set file name
-prepath = '健康样品\纵切样品\';                   %%%% set path name for saving
-path_name =['D:\OCT_Sync\Data\OCT-Data\Data_3D\Data_20171102\',filename,'\'];   %%% 设置读取数据路径
+filename = 'ZH9_2';                              %%%% set file name
+prepath = '健康样品\横切样品\';                   %%%% set path name for saving
+path_name =['D:\OCT_Sync\Data\OCT-Data\Data_3D\Data_20171114\',filename,'\'];   %%% 设置读取数据路径
 addpath(path_name);  
 pic = dir([path_name,'*.bmp']);
 
 % The algorithm parameters:
 k = 2;                               %% 调节下图强边缘比例，该值越大，边界点越多       
-ThresholdRatio = 0.4;                %% 强弱边缘的比例
-extract =   10   ;                   %% 除去下图上面几行的1值
+ThresholdRatio = 0.6;                %% 强弱边缘的比例
+extract =  20   ;                   %% 除去下图上面几行的1值
 extract_pro = extract + 0;
 c_l = 320;                          % set the range for correcting
 c_r = 500;                          % set the range for correcting

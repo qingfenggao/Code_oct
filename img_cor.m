@@ -10,7 +10,7 @@
 
 function[img_cor] = img_cor(img,flag)
   [~,m] = size(img);
-  load correct_7D_20171102
+  load correct_7D_20171114
 for i = 1:m
     img_cor(:,i) = img(z_correct(i)+2:471+z_correct(i),i);
 end

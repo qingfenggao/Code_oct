@@ -1,4 +1,4 @@
-function [ReliabilityCoeficient,SEd,SDdiff,means,diffs,meanDiff,CI_agreement,CI_d,linFit] = BlandAltman(var1, var2, flag)
+function [ReliabilityCoeficient,SEd,SDdiff,means,diffs,meanDiff,CI_agreement,CI_d,linFit,xlim] = BlandAltman(var1, var2, flag)
     % revise by gao at 2017/11/9
     %%%Plots a Bland-Altman Plot
     %%%INPUTS:
@@ -45,6 +45,7 @@ function [ReliabilityCoeficient,SEd,SDdiff,means,diffs,meanDiff,CI_agreement,CI_
     
     %%%plot results unless flag is 0
     figure('position',[400 100 800 600]);
+    Deta = 0.000001;
     if flag ~= 0
 %         plot(means,diffs,'',...
 %             'MarkerSize',10,...
@@ -55,9 +56,12 @@ function [ReliabilityCoeficient,SEd,SDdiff,means,diffs,meanDiff,CI_agreement,CI_
         hold on
         if flag > 1
             xlim = get(gca,'Xlim');
-            plot(xlim,[1,1].*CI_d(1),'k--');
-            plot(xlim,[1,1].*CI_d(2),'k--');
-            plot(xlim,zeros(1,length(xlim)),'k'); %%%plot zero
+            Xlim = [xlim(1)+Deta,xlim(2)-Deta];
+            plot(Xlim,[1,1].*CI_d(1),'k--');
+            plot(Xlim,[1,1].*CI_d(2),'k--');
+            plot(Xlim,zeros(1,length(Xlim)),'k'); %%%plot zero
+
+%           line([xlim(1)+Deta,xlim(2)-Deta],[0,0]);
         end
         if flag > 2
             plot(means, means.*linFit(1)+linFit(2),'k--'); %%%plot the linear fit

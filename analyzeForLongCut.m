@@ -1,35 +1,38 @@
 % version 1.0   
 % First time written by gao  at 2017/11/1
+% 由外向内取点
+% ROI数字由内向外是 1->10
+
 clear; close all; clc;
 
-filename = 'L44_1';                      %% input file name
-prepath = '健康样品\纵切样品\';          %% 
-saveValuePath = 'meanValues\';          %% 
+filename = 'L50_1';                       %% input file name
+prepath = '健康样品\纵切样品\';            %% 
+saveValuePath = 'meanValues\';            %% 
 load([prepath,filename,'.mat'])              %% care the pathway
 open([prepath,filename,'Surface.fig']);      %% input the file name which is needed to proceed
 hold on;
 ROInumForEveryLine = 10;                     %% not include centra of circle
 contourPointNum = 10;                        %% number of lines
-inXpos = [5.3,4.23];                   %% mm unit
+% inXpos = [5.3,4.23];                       %% mm unit
 coronal_int = 7.2/1000;                      % mm unit,interval
 sagittal_int = 0.027645;                     % mm unit
 axial_int = 1.31/153;                        % mm unit  4.7/500 is replaced
 picture_size = 550;                          % coronal direction length
 N_max = 2;
-N_min = 1;
+N_min = 1.33;                                %%
 [r_num,c_num]=size(N);
 r_len = (1:r_num)*sagittal_int;
 c_len = (1:c_num)*coronal_int;
 
 for i = 1:contourPointNum
-    [outXpos(i),outYpos(i)] = ginput(1);                       % use mouse to get contour points
+    [outXpos(i),outYpos(i)] = ginput(1);                                 % use mouse to get contour points
     [inXpos(i),inYpos(i)] = ginput(1);                                   % out- represent outer point
     text(outXpos(i),outYpos(i),num2str(i),'color','r','FontSize',10);    % in-  represent inter point
     text(inXpos(i),inYpos(i),num2str(i),'color','r','FontSize',10);
     if i>=2
         line([outXpos(i-1),outXpos(i)],[outYpos(i-1),outYpos(i)],'color','r');     % plot the line of contour
         line([inXpos(i-1),inXpos(i)],[inYpos(i-1),inYpos(i)],'color','r');
-    end 
+    end
 end
 
 for i = 1:contourPointNum                                                   % the index of counter point
@@ -68,17 +71,17 @@ for i = 1:contourPointNum
         ROI_data(find(ROI_data>=N_max)) = 0;
         ROI_data(find(isnan(ROI_data)==1)) = 0;
         ROI_data(ROI_data==0) = [];
-        meanMatrix(i,j) = mean(ROI_data);             % 表示第i条线第j个圆的平均
+        meanMatrix(i,j) = mean(ROI_data,'omitnan');             % 表示第i条线第j个圆的平均
     end
 end
 
 meanData = nanmean(meanMatrix,1);       % expect nan
-
-meanValue = meanData;
 hold off;
 
-save([saveValuePath,filename,'.mat'],'meanValue');    
-disp(meanValue)
+save([saveValuePath,filename,'.mat'],'meanData');    
+disp(meanData)
+aCopyValue = meanData;
+
 
 %%%%%%%%%%%%%%  20171102_L44_1折射率数值stem图  %%%%%%%%%%%%%%%%
 % figure,

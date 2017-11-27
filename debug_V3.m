@@ -1,20 +1,20 @@
 % 下边界使用峰值法获得强边界的位置点，替换弱边界的位置
 clear;clc;close all;
 % The algorithm parameters:
-path_name = 'D:\OCT_Sync\Data\OCT-Data\Data_3D\Data_20171102\47_1';  %%% 设置数据路径
+path_name = 'D:\OCT_Sync\Data\OCT-Data\Data_3D\Data_20171114\ZL46_3';  %%% 设置数据路径
 addpath(path_name);  
 
 k = 2;                         %% 调节强边缘比例，该值越大，边界点越多  
-ThresholdRatio = 0.4;          %% 弱边缘阈值相对于强边缘阈值的比重
-frame_name = '189.bmp';         %% frame number
+ThresholdRatio = 0.6;          %% 弱边缘阈值相对于强边缘阈值的比重
+frame_name = '2.bmp';         %% frame number
 extract =   10 ;                %% correct value
 extract_pro = extract + 0;
 c_l = 185;
 c_r = 370;
 num_f = 10;                    %% correct line position
 ref_Threshold = 100;           %% 对于强反射对参考点的判断有影响的情况，设置该值
-size_1 = 150;
-size_2 = 100;                  %% setting ROI size of row direction
+size_1 = 100;
+size_2 = 90;                  %% setting ROI size of row direction
 deeper_val = 3;                % 参考点位置再向下移
 thresh=[ ];                    % 设置像素灰度低阈值和高阈值
 
